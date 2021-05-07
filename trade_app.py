@@ -78,6 +78,7 @@ if __name__ == '__main__':
     init_money = 10.00
     #买入btc
     buy_json = trade.order_value(coin_code, init_money)
+    #查询btc的数量
     amount = trade.get_amount(coin_code)
     print('当前账户%s数量:' % (coin_code) + str(amount))
     #卖出btc

@@ -28,9 +28,6 @@ buy_json = trade.order_value(coin_code, init_money)    #用1000USDT 买入btc
 # {'单号':'2722295','成交数量':0.000177,'成交金额':'10.0000','扣手续费':3.562403,'平均价格':56497.18}
 
 
-
-
-
 amount = trade.get_amount(coin_code)                   #查询买到btc的数量
 print('当前账户%s数量:' % (coin_code) + str(amount))    
 sell_json = trade.order_target(coin_code, amount)      #卖出当前持仓所有btc

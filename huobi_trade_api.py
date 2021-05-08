@@ -116,44 +116,17 @@ class HuobiData(object):
         url_path = '/v1/account/accounts'
         return self.request_api('GET', url_path, param={})  # 请求接口
 
-    def get_api_user_balance(self, account_id=''):  # 获取账号余额
+    def get_api_user_balance(self):  # 获取账号余额
+        account_id = self.huobi_account_id 
         url_path = f'/v1/account/accounts/{account_id}/balance'
         param = {
-            'account-id': account_id,
+            'account-id': self.huobi_account_id,
         }
         return self.request_api('GET', url_path, param)
 
     def get_algo_order(self):  # 策略委托
         url_path = '/v2/algo-orders/opening'
         return self.request_api('GET', url_path, param={})
-
-    def get_balance_df(self, account_id):
-        df = pd.DataFrame()
-        balance = self.get_api_user_balance(account_id)  #332924'   #是现货账户id ，不是uid
-        if balance != None:
-            ks = json.dumps(balance['list'])
-            #pd.set_option('display.float_format',lambda x : float_to_str(x))
-            df = pd.read_json(ks, orient='records')
-            df = df[
-                df.balance >
-                0.0001]  #  df=df[(df.balance>0.001) & df.currency.isin(coin)]
-        return df
-
-    def get_coin_balance(self, df, coin):
-        count = 0
-        df_coin = df[(df.balance > 0.0001) & (df.currency == coin)]
-        if (not df_coin.empty) and (len(df_coin) > 0):
-            count = df_coin['balance'].values[0]
-        return count
-
-    def get_usdt_balance(self, account_id):
-        balance = self.get_api_user_balance(account_id)  #332924'   #是现货账户id ，不是uid
-        ks = json.dumps(balance['list'])
-        #pd.set_option('display.float_format',lambda x : float_to_str(x))
-        df = pd.read_json(ks, orient='records')
-        df_usdt = df[(df.balance > 0.0001) & (df.currency == 'usdt')]  #  df=df[(df.balance>0.001) & df.currency.isin(coin)]
-        usdt = df_usdt['balance'].values[0]
-        return usdt
 
     # 现货买单委托    amount订单交易金额（市价买单为订单交易额）  price订单价格（对市价单无效）
     def buy_order(self,
@@ -210,7 +183,7 @@ class HuobiData(object):
         return self.request_api('POST', url_path, param=param)
 
     #查询当前未成交订单:   输入交易对，返回一个list，里面是字典结构的订单详情
-    def check_open_order(self, accountID='', code='btc.usdt'):
+    def check_open_order(self, code='btc.usdt'):
         url_path = f'/v1/order/openOrders'
         code = code.replace('.', '')
         param = {'account-id': self.huobi_account_id, 'symbol': code}
@@ -277,10 +250,22 @@ class HuobiData(object):
         }  #clientOrderIds必须是列表，最多列表50个，最多撤50个
         return self.request_api('POST', url_path, param=param)
 
+    #查询币的数量
+    def get_amount(self, coin_code):
+        clear_amount = self.get_balance(split_code(coin_code))
+        amount_precision = int(self.vpair.loc[HB(coin_code), 'amount-precision'])  #的到币的数量精度
+        amount = cut_float(clear_amount, amount_precision)
+        return amount
+
+    #查询某个币的余额
     def get_balance(self, coin):
         count = 0
-        df = self.get_balance_df(self.huobi_account_id)
-        df_coin = df[(df.balance > 0.0001) & (df.currency == coin)]
-        if (not df_coin.empty) and (len(df_coin) > 0):
-            count = df_coin['balance'].values[0]
+        df = pd.DataFrame()
+        balance = self.get_api_user_balance()  #是现货账户id ，不是uid
+        if balance != None:
+            ks = json.dumps(balance['list'])
+            df = pd.read_json(ks, orient='records')
+            df_coin = df[(df.balance > 0.0001) & (df.currency == coin)]
+            if (not df_coin.empty) and (len(df_coin) > 0):
+                count = df_coin['balance'].values[0] 
         return count

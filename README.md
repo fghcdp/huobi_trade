@@ -37,7 +37,11 @@ sell_json = trade.order_target(coin_code, amount)
  
 
 ----------------------------------------------------
-### 巴特量化(BestQuant)：数字货币 股市量化工具 行情系统软件提供商
+### 巴特量化
+* 数字货币 股市量化工具 行情系统软件开发
+
+* BTC虚拟货币量化交易策略开发 自动化交易策略运行
+
 ----------------------------------------------------
 
 ![加入群聊](https://github.com/mpquant/huobi_intf/blob/main/img/qrcode.png) 

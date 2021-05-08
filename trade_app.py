@@ -78,7 +78,6 @@ if __name__ == '__main__':
     amount = huobi_trade.get_amount(coin_code)                  #查询btc的数量
     print('当前账户%s数量:' % (coin_code) + str(amount))
 
-    #卖出btc
     sell_json = huobi_trade.order_target(coin_code, amount)     #卖出当前持仓所有btc
     # sell_json 返回字典类型，卖出成交回报：
     # {'单号':'2722297','成交数量': 0.000177,'成交金额': 9.9327,'扣手续费':0.019865,'平均价格': 56229.7}

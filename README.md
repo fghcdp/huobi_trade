@@ -14,20 +14,17 @@
   btc的买入和卖出，以及查询账户余额
 
 ```python
-#自己的火币账户的access_key, secret_key
+#自己的火币账户的access_key, secret_key (火币每个主账号能创建200个子账号，尽量使用子账号操作,防范风险)
 access_key = 'XXXXXXXXXXXXXXXXXXXX'
 secret_key = 'XXXXXXXXXXXXXXXXXXXXXXX'
-trade = hb_trade(access_key, secret_key)
-coin_code = 'btc.usdt'
-#买入金额(单位:美元)
-init_money = 1000.00
-#买入btc
-buy_json = trade.order_value(coin_code, init_money)
-#查询btc的数量
-amount = trade.get_amount(coin_code)
-print('当前账户%s数量:' % (coin_code) + str(amount))
-#卖出btc
-sell_json = trade.order_target(coin_code, amount)
+trade = hb_trade(access_key, secret_key)               #初始化交易类
+coin_code = 'btc.usdt'                                 #定义交易对  
+init_money = 1000.00                                   #买入金额(单位:usdt)
+buy_json = trade.order_value(coin_code, init_money)    #用1000USDT 买入btc   
+
+amount = trade.get_amount(coin_code)                   #查询买到btc的数量
+print('当前账户%s数量:' % (coin_code) + str(amount))    
+sell_json = trade.order_target(coin_code, amount)      #卖出当前持仓所有btc
 ```
 
 

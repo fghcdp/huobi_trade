@@ -250,14 +250,14 @@ class HuobiData(object):
         }  #clientOrderIds必须是列表，最多列表50个，最多撤50个
         return self.request_api('POST', url_path, param=param)
 
-    #查询币的数量
+    #查询交易对的数量
     def get_amount(self, coin_code):
         clear_amount = self.get_balance(split_code(coin_code))
         amount_precision = int(self.vpair.loc[HB(coin_code), 'amount-precision'])  #的到币的数量精度
         amount = cut_float(clear_amount, amount_precision)
         return amount
 
-    #查询某个币的余额
+    #查询某个稳定的余额
     def get_balance(self, coin):
         count = 0
         df = pd.DataFrame()

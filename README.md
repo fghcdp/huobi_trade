@@ -21,7 +21,9 @@ trade = hb_trade(access_key, secret_key)               #初始化交易类
 coin_code = 'btc.usdt'                                 #定义交易对  
 init_money = 1000.00                                   #买入金额(单位:usdt)
 buy_json = trade.order_value(coin_code, init_money)    #用1000USDT 买入btc   
-
+```
+* buy_json 返回： {'单号': '272229546125038', '成交数量': 0.000177, '成交金额': '10.000000', '扣手续费': 3.56240360358, '平均价格': 56497.18}
+```python
 amount = trade.get_amount(coin_code)                   #查询买到btc的数量
 print('当前账户%s数量:' % (coin_code) + str(amount))    
 sell_json = trade.order_target(coin_code, amount)      #卖出当前持仓所有btc
